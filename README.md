@@ -106,7 +106,7 @@ El diseño sigue la estrategia **mobile-first** con dos breakpoints:
 
 | Organización | Descripción |
 |--------------|-------------|
-| **[BucaraTec](https://bucaratec.com)** | Comunidad tecnológica de Bucaramanga, impulsora del ecosistema tech regional |
+| **[BucaraTec | Comunidad tecnológica de Bucaramanga, impulsora del ecosistema tech regional |
 | **AWS User Group Bucaramanga** | Grupo de usuarios de Amazon Web Services liderado por Juliana Ramírez A. |
 | **UNAB TEC** | Universidad Autónoma de Bucaramanga — sede del evento (Salón L51) |
 
