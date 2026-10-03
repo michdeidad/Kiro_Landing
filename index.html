@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Workshop gratuito Kiro en modo constructor: specs, agentes y una web real. 12 de septiembre 2026, UNAB Salón L51, Bucaramanga." />
+  <title>Kiro en modo constructor · 12 sep 2026</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════════ HERO ═══════════════════════ -->
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+    <!-- Pixel-art grid overlay -->
+    <div class="pixel-grid" aria-hidden="true"></div>
+    <!-- Floating blobs -->
+    <div class="blob blob-1" aria-hidden="true"></div>
+    <div class="blob blob-2" aria-hidden="true"></div>
+
+    <div class="hero-inner container">
+      <div class="hero-content">
+        <span class="badge" role="img" aria-label="Workshop gratuito">⚡ WORKSHOP GRATUITO</span>
+
+        <h1 id="hero-title" class="hero-title">
+          Kiro en modo<br />
+          <span class="highlight">constructor</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Specs, agentes y una web real
+        </p>
+
+        <ul class="hero-meta" aria-label="Detalles del evento">
+          <li>
+            <span class="meta-icon" aria-hidden="true">📅</span>
+            <span>Sábado 12 de septiembre, 2026</span>
+          </li>
+          <li>
+            <span class="meta-icon" aria-hidden="true">🕘</span>
+            <span>9:00 AM – 11:00 AM</span>
+          </li>
+          <li>
+            <span class="meta-icon" aria-hidden="true">📍</span>
+            <span>UNAB · Salón L51, Bucaramanga</span>
+          </li>
+        </ul>
+
+        <!-- Countdown -->
+        <div class="countdown-wrapper" aria-label="Contador regresivo hacia el evento">
+          <p class="countdown-label">El evento comienza en</p>
+          <div class="countdown" id="countdown" role="timer">
+            <div class="countdown-unit">
+              <span class="countdown-num" id="cd-days">00</span>
+              <span class="countdown-lbl">Días</span>
+            </div>
+            <span class="countdown-sep" aria-hidden="true">:</span>
+            <div class="countdown-unit">
+              <span class="countdown-num" id="cd-hours">00</span>
+              <span class="countdown-lbl">Horas</span>
+            </div>
+            <span class="countdown-sep" aria-hidden="true">:</span>
+            <div class="countdown-unit">
+              <span class="countdown-num" id="cd-minutes">00</span>
+              <span class="countdown-lbl">Minutos</span>
+            </div>
+            <span class="countdown-sep" aria-hidden="true">:</span>
+            <div class="countdown-unit">
+              <span class="countdown-num" id="cd-seconds">00</span>
+              <span class="countdown-lbl">Segundos</span>
+            </div>
+          </div>
+          <p class="countdown-ended hidden" id="countdown-ended" aria-live="polite">🎉 ¡El evento ya comenzó!</p>
+        </div>
+
+        <a href="#agenda" class="btn-primary" aria-label="Ver la agenda completa del evento">
+          Ver agenda completa
+          <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+
+      <!-- Pixel art illustration -->
+      <div class="hero-illustration" aria-hidden="true">
+        <img
+          src="assets/hero-illustration.png"
+          alt="Ilustración pixel art de Kiro"
+          class="hero-img"
+          loading="eager"
+          onerror="this.style.display='none'"
+        />
+        <!-- Fallback SVG pixel art robot -->
+        <div class="pixel-robot" id="pixel-robot">
+          <div class="pr-head">
+            <div class="pr-eye pr-eye-l"></div>
+            <div class="pr-eye pr-eye-r"></div>
+            <div class="pr-mouth"></div>
+          </div>
+          <div class="pr-body">
+            <div class="pr-screen">
+              <span class="pr-code">_</span>
+            </div>
+          </div>
+          <div class="pr-legs">
+            <div class="pr-leg"></div>
+            <div class="pr-leg"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ AGENDA ═══════════════════════ -->
+  <section class="agenda" id="agenda" aria-labelledby="agenda-title">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">PROGRAMA</span>
+        <h2 id="agenda-title" class="section-title">Agenda del día</h2>
+        <p class="section-desc">Dos horas de contenido práctico, demos en vivo y networking.</p>
+      </div>
+
+      <div class="timeline" role="list" aria-label="Cronograma del evento">
+
+        <article class="timeline-item" role="listitem" tabindex="0" aria-label="9:00 AM - Bienvenida y contexto">
+          <div class="tl-time">
+            <span class="tl-hour">9:00</span>
+            <span class="tl-ampm">AM</span>
+          </div>
+          <div class="tl-connector" aria-hidden="true">
+            <div class="tl-dot"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-card-inner">
+              <span class="tl-tag tl-tag-opening">Apertura</span>
+              <h3 class="tl-title">Bienvenida y contexto</h3>
+              <p class="tl-desc">Introducción al ecosistema Kiro: qué es, por qué ahora y cómo cambia el flujo de trabajo del desarrollador moderno.</p>
+              <div class="tl-duration">⏱ 15 min</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-item" role="listitem" tabindex="0" aria-label="9:15 AM - Tendencia: Vibecoding">
+          <div class="tl-time">
+            <span class="tl-hour">9:15</span>
+            <span class="tl-ampm">AM</span>
+          </div>
+          <div class="tl-connector" aria-hidden="true">
+            <div class="tl-dot"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-card-inner">
+              <span class="tl-tag tl-tag-talk">Charla</span>
+              <h3 class="tl-title">Tendencia: Vibecoding</h3>
+              <p class="tl-desc">José Verbel nos presenta el fenómeno del vibecoding: cómo la IA está redefiniendo la experiencia de escribir software.</p>
+              <div class="tl-speaker">
+                <div class="tl-avatar tl-avatar-jose" aria-hidden="true">JV</div>
+                <span>José Verbel</span>
+              </div>
+              <div class="tl-duration">⏱ 30 min</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-item" role="listitem" tabindex="0" aria-label="9:45 AM - Kiro en modo constructor: specs y agentes">
+          <div class="tl-time">
+            <span class="tl-hour">9:45</span>
+            <span class="tl-ampm">AM</span>
+          </div>
+          <div class="tl-connector" aria-hidden="true">
+            <div class="tl-dot"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-card-inner">
+              <span class="tl-tag tl-tag-demo">Demo en vivo</span>
+              <h3 class="tl-title">Kiro en modo constructor: specs y agentes</h3>
+              <p class="tl-desc">Juliana demuestra en vivo cómo usar Kiro para generar specs, delegar a agentes y construir una web real de principio a fin.</p>
+              <div class="tl-speaker">
+                <div class="tl-avatar tl-avatar-juli" aria-hidden="true">JR</div>
+                <span>Juliana Ramírez A.</span>
+              </div>
+              <div class="tl-duration">⏱ 15 min</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-item timeline-item--special" role="listitem" tabindex="0" aria-label="10:00 AM - Refrigerio y networking">
+          <div class="tl-time">
+            <span class="tl-hour">10:00</span>
+            <span class="tl-ampm">AM</span>
+          </div>
+          <div class="tl-connector" aria-hidden="true">
+            <div class="tl-dot tl-dot--special"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card tl-card--snack">
+            <div class="tl-card-inner">
+              <span class="tl-tag tl-tag-snack">☕ Refrigerio</span>
+              <h3 class="tl-title">Break · Networking</h3>
+              <p class="tl-desc">Pausa para recargar energías, compartir con los ponentes y conectar con otros devs de la comunidad.</p>
+              <div class="tl-duration">⏱ 15 min</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-item timeline-item--star" role="listitem" tabindex="0" aria-label="10:15 AM - Workshop: Flappy Kiro">
+          <div class="tl-time">
+            <span class="tl-hour">10:15</span>
+            <span class="tl-ampm">AM</span>
+          </div>
+          <div class="tl-connector" aria-hidden="true">
+            <div class="tl-dot tl-dot--star"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-card tl-card--star">
+            <div class="tl-star-badge" aria-hidden="true">★ ESTRELLA</div>
+            <div class="tl-card-inner">
+              <span class="tl-tag tl-tag-workshop">🎮 Workshop</span>
+              <h3 class="tl-title">Flappy Kiro</h3>
+              <p class="tl-desc">¡Manos al teclado! Construimos juntos un juego Flappy Bird usando Kiro como copiloto. Desde cero hasta jugable en minutos, en vivo y con la audiencia participando.</p>
+              <div class="tl-speaker">
+                <div class="tl-avatar tl-avatar-juli" aria-hidden="true">JR</div>
+                <span>Juliana Ramírez A.</span>
+              </div>
+              <div class="tl-duration">⏱ 45 min · El gran cierre</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-item" role="listitem" tabindex="0" aria-label="11:00 AM - Cierre y preguntas">
+          <div class="tl-time">
+            <span class="tl-hour">11:00</span>
+            <span class="tl-ampm">AM</span>
+          </div>
+          <div class="tl-connector" aria-hidden="true">
+            <div class="tl-dot tl-dot--end"></div>
+          </div>
+          <div class="tl-card">
+            <div class="tl-card-inner">
+              <span class="tl-tag tl-tag-closing">Cierre</span>
+              <h3 class="tl-title">Q&A y cierre</h3>
+              <p class="tl-desc">Espacio abierto para preguntas, recursos compartidos y foto grupal de la comunidad.</p>
+              <div class="tl-duration">⏱ Fin del evento</div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ SPEAKERS ═══════════════════════ -->
+  <section class="speakers" id="ponentes" aria-labelledby="speakers-title">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">PONENTES</span>
+        <h2 id="speakers-title" class="section-title">Quiénes presentan</h2>
+        <p class="section-desc">Profesionales de la industria, líderes de comunidad y constructores en el día a día.</p>
+      </div>
+
+      <div class="speakers-grid">
+
+        <!-- Juliana Ramírez -->
+        <article class="speaker-card speaker-card--juliana" tabindex="0" aria-label="Ponente Juliana Ramírez A.">
+          <div class="speaker-glow" aria-hidden="true"></div>
+          <div class="speaker-avatar-wrap" aria-hidden="true">
+            <div class="speaker-avatar speaker-avatar--juliana">
+              <span class="speaker-initials">JR</span>
+            </div>
+            <div class="speaker-ring" aria-hidden="true"></div>
+          </div>
+          <div class="speaker-info">
+            <h3 class="speaker-name">Juliana Ramírez A.</h3>
+            <p class="speaker-role">Semi Senior Developer · FinTech</p>
+            <p class="speaker-org">
+              <span class="org-badge org-badge--aws">☁ Líder AWS User Group Bucaramanga</span>
+            </p>
+            <p class="speaker-bio">
+              Desarrolladora de software con experiencia en el sector FinTech. Apasionada por democratizar las herramientas de IA en la comunidad tech de Bucaramanga.
+            </p>
+            <div class="speaker-talk">
+              <span class="speaker-talk-label">Presenta</span>
+              <span class="speaker-talk-title">Kiro en modo constructor + Workshop Flappy Kiro</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- José Verbel -->
+        <article class="speaker-card speaker-card--jose" tabindex="0" aria-label="Ponente José Verbel">
+          <div class="speaker-glow" aria-hidden="true"></div>
+          <div class="speaker-avatar-wrap" aria-hidden="true">
+            <div class="speaker-avatar speaker-avatar--jose">
+              <span class="speaker-initials">JV</span>
+            </div>
+            <div class="speaker-ring" aria-hidden="true"></div>
+          </div>
+          <div class="speaker-info">
+            <h3 class="speaker-name">José Verbel</h3>
+            <p class="speaker-role">Developer & Community Builder</p>
+            <p class="speaker-org">
+              <span class="org-badge org-badge--community">🏗 Comunidad Tech Bucaramanga</span>
+            </p>
+            <p class="speaker-bio">
+              Evangelista de tendencias emergentes en desarrollo de software. Explora cómo el vibecoding está cambiando la relación entre el programador y el código.
+            </p>
+            <div class="speaker-talk">
+              <span class="speaker-talk-label">Presenta</span>
+              <span class="speaker-talk-title">Tendencia: Vibecoding</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-top">
+        <p class="footer-tagline">Un evento de la comunidad · Bucaramanga, Colombia</p>
+        <div class="footer-event-info">
+          <span>📅 12 sep 2026</span>
+          <span>🕘 9:00 – 11:00 AM</span>
+          <span>📍 UNAB · Salón L51</span>
+        </div>
+      </div>
+
+      <div class="footer-organizers">
+        <p class="footer-organizers-label">Organizado por</p>
+        <div class="footer-logos" role="list" aria-label="Organizadores del evento">
+
+          <a href="#" class="footer-logo-item" role="listitem" aria-label="BucaraTec">
+            <img
+              src="assets/logo-bucaratec.png"
+              alt="Logo BucaraTec"
+              class="footer-logo"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+            />
+            <span class="footer-logo-fallback" style="display:none">BucaraTec</span>
+          </a>
+
+          <a href="#" class="footer-logo-item" role="listitem" aria-label="AWS User Group Bucaramanga">
+            <img
+              src="assets/logo-aws.png"
+              alt="Logo AWS User Group Bucaramanga"
+              class="footer-logo"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+            />
+            <span class="footer-logo-fallback" style="display:none">AWS User Group</span>
+          </a>
+
+          <a href="#" class="footer-logo-item" role="listitem" aria-label="UNAB TEC">
+            <img
+              src="assets/logo-unab.png"
+              alt="Logo UNAB TEC"
+              class="footer-logo"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+            />
+            <span class="footer-logo-fallback" style="display:none">UNAB TEC</span>
+          </a>
+
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">
+          &copy; 2026 · Hecho con ❤️ y <strong>Kiro</strong> · Bucaramanga, Colombia
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
