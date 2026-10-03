@@ -1135,3 +1135,340 @@ ul, ol {
   outline-offset: 3px;
   border-radius: 4px;
 }
+
+/* ══════════════════════════════════════════════════════
+   REGISTRO SECTION
+   ══════════════════════════════════════════════════════ */
+.registro {
+  padding: var(--section-pad);
+  background: linear-gradient(
+    135deg,
+    var(--bg-secondary) 0%,
+    #14152a 50%,
+    var(--bg-secondary) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.registro::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--neon), transparent);
+  opacity: 0.4;
+}
+
+/* Subtle grid overlay */
+.registro::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(122,255,0,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122,255,0,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.registro-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+}
+
+.registro-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 480px;
+  text-align: center;
+}
+
+.registro-perks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  text-align: left;
+  align-self: center;
+  margin-top: 0.5rem;
+}
+
+.registro-perks li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.registro-perks li span:first-child {
+  color: var(--neon);
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Registration card */
+.registro-cta {
+  width: 100%;
+  max-width: 380px;
+}
+
+.registro-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-neon);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow:
+    0 0 40px rgba(122,255,0,0.1),
+    0 16px 48px rgba(0,0,0,0.4);
+  transition: var(--transition);
+}
+
+.registro-card:hover {
+  box-shadow:
+    0 0 60px rgba(122,255,0,0.18),
+    0 20px 56px rgba(0,0,0,0.5);
+  transform: translateY(-3px);
+}
+
+.registro-card-header {
+  background: linear-gradient(135deg, var(--purple-deep), var(--purple-mid));
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.registro-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--neon);
+  text-transform: uppercase;
+  animation: pulseBadge 2.5s ease-in-out infinite;
+}
+
+.registro-card-body {
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.registro-event-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-white);
+  text-align: center;
+}
+
+.registro-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.registro-details li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.btn-registro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--neon);
+  color: var(--bg-secondary);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.9rem 1.5rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--neon);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 0 20px var(--neon-glow);
+  text-align: center;
+}
+
+.btn-registro:hover,
+.btn-registro:focus-visible {
+  background: transparent;
+  color: var(--neon);
+  box-shadow: 0 0 36px var(--neon-glow), 0 0 64px rgba(122,255,0,0.2);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.registro-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+/* ══════════════════════════════════════════════════════
+   FAB — Floating Action Button
+   ══════════════════════════════════════════════════════ */
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 999;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
+
+  background: var(--neon);
+  color: var(--bg-secondary);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.9rem;
+
+  /* Pill shape — collapses to circle on mobile */
+  padding: 0.8rem 1.4rem;
+  border-radius: 100px;
+  border: 2px solid var(--neon);
+
+  text-decoration: none;
+  cursor: pointer;
+
+  /* Shadow glow */
+  box-shadow:
+    0 0 20px var(--neon-glow),
+    0 4px 16px rgba(0,0,0,0.5);
+
+  /* Entrance animation */
+  animation: fabEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1s both,
+             fabGlow 2.8s ease-in-out 1.5s infinite;
+
+  transition:
+    background var(--transition),
+    color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition),
+    padding var(--transition);
+}
+
+.fab-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: transform var(--transition);
+}
+
+.fab-label {
+  white-space: nowrap;
+  transition: opacity var(--transition), max-width var(--transition);
+}
+
+/* Hover state */
+.fab:hover,
+.fab:focus-visible {
+  background: transparent;
+  color: var(--neon);
+  border-color: var(--neon);
+  box-shadow:
+    0 0 40px var(--neon-glow),
+    0 0 70px rgba(122,255,0,0.25),
+    0 8px 24px rgba(0,0,0,0.6);
+  transform: translateY(-4px) scale(1.04);
+  outline: none;
+}
+
+.fab:hover .fab-icon,
+.fab:focus-visible .fab-icon {
+  transform: rotate(-10deg) scale(1.2);
+}
+
+/* Hidden state (scrolled past registro) */
+.fab--hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px) scale(0.9);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fab--visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Keyframes */
+@keyframes fabEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fabGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 20px var(--neon-glow),
+      0 4px 16px rgba(0,0,0,0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 36px rgba(122,255,0,0.6),
+      0 0 56px rgba(122,255,0,0.25),
+      0 4px 16px rgba(0,0,0,0.5);
+  }
+}
+
+/* ── Responsive FAB & Registro ──────────────────────── */
+@media (max-width: 480px) {
+  /* Collapse FAB label on very small screens */
+  .fab-label {
+    display: none;
+  }
+  .fab {
+    padding: 0.9rem;
+    border-radius: 50%;
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+  .fab-icon {
+    font-size: 1.3rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .registro-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+
+  .registro-content {
+    text-align: left;
+    flex: 1;
+  }
+
+  .registro-perks {
+    align-self: flex-start;
+  }
+
+  .registro-cta {
+    flex-shrink: 0;
+  }
+}

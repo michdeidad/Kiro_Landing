@@ -286,3 +286,69 @@ const EVENT_DATE = new Date('2026-09-12T09:00:00-05:00');
   `;
   document.head.appendChild(style);
 })();
+
+/* ══════════════════════════════════════════════════════
+   FAB — Floating Action Button
+   - Aparece después de 300px de scroll
+   - Se oculta una vez que el usuario llega a #registro
+   - Al hacer clic desplaza suavemente a #registro
+   ══════════════════════════════════════════════════════ */
+(function initFAB() {
+  const fab        = document.getElementById('fab');
+  const registro   = document.getElementById('registro');
+  if (!fab) return;
+
+  // Start hidden (CSS animation handles the entrance after 1s)
+  fab.classList.add('fab--visible');
+
+  function onScroll() {
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    // Hide FAB once the registro section is fully in view
+    if (registro) {
+      const rect = registro.getBoundingClientRect();
+      // When the top of registro reaches the middle of the viewport
+      if (rect.top <= window.innerHeight * 0.6) {
+        fab.classList.add('fab--hidden');
+        fab.classList.remove('fab--visible');
+        return;
+      }
+    }
+
+    // Show after scrolling past the hero (300px)
+    if (scrollY > 300) {
+      fab.classList.remove('fab--hidden');
+      fab.classList.add('fab--visible');
+    } else {
+      fab.classList.add('fab--hidden');
+      fab.classList.remove('fab--visible');
+    }
+  }
+
+  // Use passive listener for scroll performance
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Also handle click: smooth scroll + temporary label animation
+  fab.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.getElementById('registro');
+    if (!target) return;
+
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Brief visual feedback on the button
+    fab.style.transform = 'scale(0.92)';
+    setTimeout(() => { fab.style.transform = ''; }, 180);
+  });
+
+  // Keyboard: Enter / Space
+  fab.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fab.click();
+    }
+  });
+
+  // Run once on load in case page is already scrolled
+  onScroll();
+})();
