@@ -1012,16 +1012,41 @@ ul, ol {
 
 .footer-logo-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.6rem;
   transition: var(--transition);
   border-radius: var(--radius);
-  padding: 0.5rem;
+  padding: 0.75rem;
+  text-decoration: none;
 }
 
-.footer-logo-item:hover {
-  transform: translateY(-3px);
-  filter: drop-shadow(0 0 12px var(--neon-glow));
+.footer-logo-item:hover,
+.footer-logo-item:focus-visible {
+  transform: translateY(-4px) scale(1.05);
+  filter: drop-shadow(0 0 14px var(--neon-glow));
+  outline: none;
+}
+
+.footer-logo-item:hover .footer-logo,
+.footer-logo-item:focus-visible .footer-logo {
+  filter: brightness(1.15) grayscale(0);
+}
+
+.footer-org-name {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+  transition: color var(--transition);
+}
+
+.footer-logo-item:hover .footer-org-name,
+.footer-logo-item:focus-visible .footer-org-name {
+  color: var(--neon);
 }
 
 .footer-logo {
@@ -1030,10 +1055,6 @@ ul, ol {
   object-fit: contain;
   filter: brightness(0.85) grayscale(0.1);
   transition: var(--transition);
-}
-
-.footer-logo-item:hover .footer-logo {
-  filter: brightness(1.1) grayscale(0);
 }
 
 .footer-logo-fallback {
