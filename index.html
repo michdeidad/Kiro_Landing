@@ -12,9 +12,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-
+  <!-- ── Skip link: accesibilidad teclado ─────────────── -->
+  <a href="#agenda" class="skip-link">Saltar al contenido principal</a>
   <!-- ═══════════════════════ HERO ═══════════════════════ -->
-  <section class="hero" id="hero" aria-labelledby="hero-title">
+  <section class="hero" id="hero" aria-labelledby="hero-title" role="banner">
     <!-- Pixel-art grid overlay -->
     <div class="pixel-grid" aria-hidden="true"></div>
     <!-- Floating blobs -->
@@ -50,8 +51,8 @@
         </ul>
 
         <!-- Countdown -->
-        <div class="countdown-wrapper" aria-label="Contador regresivo hacia el evento">
-          <p class="countdown-label">El evento comienza en</p>
+        <div class="countdown-wrapper" aria-label="Información de tiempo del evento">
+          <p class="countdown-label" aria-hidden="true">El evento comienza en</p>
           <div class="countdown" id="countdown" role="timer">
             <div class="countdown-unit">
               <span class="countdown-num" id="cd-days">00</span>
@@ -73,7 +74,7 @@
               <span class="countdown-lbl">Segundos</span>
             </div>
           </div>
-          <p class="countdown-ended hidden" id="countdown-ended" aria-live="polite">🎉 ¡El evento ya comenzó!</p>
+          <p class="countdown-ended hidden" id="countdown-ended" aria-live="polite">🎉 ¡Este evento ya se realizó!</p>
         </div>
 
         <a href="#agenda" class="btn-primary" aria-label="Ver la agenda completa del evento">
@@ -88,10 +89,12 @@
           src="assets/hero-illustration.png"
           alt="Ilustración pixel art de Kiro"
           class="hero-img"
+          id="hero-img"
           loading="eager"
-          onerror="this.style.display='none'"
+          onerror="this.style.display='none'; document.getElementById('pixel-robot').style.display='flex';"
+          onload="document.getElementById('pixel-robot').style.display='none';"
         />
-        <!-- Fallback SVG pixel art robot -->
+        <!-- Fallback CSS pixel art robot — visible si la imagen falla -->
         <div class="pixel-robot" id="pixel-robot">
           <div class="pr-head">
             <div class="pr-eye pr-eye-l"></div>
@@ -113,7 +116,7 @@
   </section>
 
   <!-- ═══════════════════════ AGENDA ═══════════════════════ -->
-  <section class="agenda" id="agenda" aria-labelledby="agenda-title">
+  <section class="agenda" id="agenda" aria-labelledby="agenda-title" role="main">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">PROGRAMA</span>
@@ -254,7 +257,7 @@
   </section>
 
   <!-- ═══════════════════════ SPEAKERS ═══════════════════════ -->
-  <section class="speakers" id="ponentes" aria-labelledby="speakers-title">
+  <section class="speakers" id="ponentes" aria-labelledby="speakers-title" role="region">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">PONENTES</span>
@@ -323,10 +326,10 @@
     <div class="container">
       <div class="footer-top">
         <p class="footer-tagline">Un evento de la comunidad · Bucaramanga, Colombia</p>
-        <div class="footer-event-info">
-          <span>📅 12 sep 2026</span>
-          <span>🕘 9:00 – 11:00 AM</span>
-          <span>📍 UNAB · Salón L51</span>
+        <div class="footer-event-info" aria-label="Resumen del evento">
+          <span><span aria-hidden="true">📅</span> 12 sep 2026</span>
+          <span><span aria-hidden="true">🕘</span> 9:00 – 11:00 AM</span>
+          <span><span aria-hidden="true">📍</span> UNAB · Salón L51</span>
         </div>
       </div>
 

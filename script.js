@@ -1,33 +1,39 @@
 /* =====================================================
    KIRO EN MODO CONSTRUCTOR · script.js
    Vanilla JS — sin dependencias externas
-   - Contador regresivo en tiempo real
-   - Agenda interactiva con resaltado de bloque activo
-   - Animaciones de entrada (Intersection Observer)
-   - Pixel robot blinking loop (ya en CSS, aquí el cursor)
+   RF-02: Contador regresivo UTC-5 con flip animation
+   RF-03: Agenda expand/collapse + teclado
+   RF-04: Resaltado EN VIVO hora Colombia
+   RF-06: Pixel robot snippets rotativos
+   RF-08: IntersectionObserver + prefers-reduced-motion
    ===================================================== */
 
 'use strict';
 
 /* ── Fecha objetivo del evento ──────────────────────── */
-// 12 de septiembre de 2026, 9:00 AM (hora Colombia, UTC-5)
+// 12 de septiembre de 2026, 9:00 AM — hora Colombia UTC-5
 const EVENT_DATE = new Date('2026-09-12T09:00:00-05:00');
 
 /* ══════════════════════════════════════════════════════
-   CONTADOR REGRESIVO
+   RF-02 · CONTADOR REGRESIVO
+   Target: 2026-09-12T09:00:00-05:00
+   - Actualización cada 1s con setTimeout recursivo
+   - Animación flip en cada dígito al cambiar
+   - Al expirar: oculta .countdown, muestra mensaje
+   - aria-label dinámico cada minuto para screen readers
    ══════════════════════════════════════════════════════ */
 (function initCountdown() {
-  const elDays    = document.getElementById('cd-days');
-  const elHours   = document.getElementById('cd-hours');
-  const elMinutes = document.getElementById('cd-minutes');
-  const elSeconds = document.getElementById('cd-seconds');
+  const elDays      = document.getElementById('cd-days');
+  const elHours     = document.getElementById('cd-hours');
+  const elMinutes   = document.getElementById('cd-minutes');
+  const elSeconds   = document.getElementById('cd-seconds');
   const elCountdown = document.getElementById('countdown');
   const elEnded     = document.getElementById('countdown-ended');
 
   if (!elDays || !elHours || !elMinutes || !elSeconds) return;
 
   /**
-   * Pad a number to two digits.
+   * Formatea un número a dos dígitos.
    * @param {number} n
    * @returns {string}
    */
@@ -36,7 +42,7 @@ const EVENT_DATE = new Date('2026-09-12T09:00:00-05:00');
   }
 
   /**
-   * Animate a digit element with a brief scale-down when the value changes.
+   * Actualiza un dígito con animación flip si el valor cambia.
    * @param {HTMLElement} el
    * @param {string} newValue
    */
@@ -49,19 +55,24 @@ const EVENT_DATE = new Date('2026-09-12T09:00:00-05:00');
     }, 80);
   }
 
+  /** Actualiza el aria-label del timer para screen readers. */
+  function updateAriaLabel(days, hours, minutes) {
+    elCountdown.setAttribute(
+      'aria-label',
+      `Faltan ${days} días, ${hours} horas y ${minutes} minutos para el evento`
+    );
+  }
+
   function tick() {
     const now  = Date.now();
     const diff = EVENT_DATE.getTime() - now;
 
     if (diff <= 0) {
-      // Event has started or passed
-      updateDigit(elDays,    '00');
-      updateDigit(elHours,   '00');
-      updateDigit(elMinutes, '00');
-      updateDigit(elSeconds, '00');
+      // Evento ya se realizó — ocultar contador, mostrar mensaje
       elCountdown.classList.add('hidden');
       elEnded.classList.remove('hidden');
-      return; // stop ticking
+      elEnded.textContent = '🎉 ¡Este evento ya se realizó!';
+      return; // detener el tick
     }
 
     const totalSeconds = Math.floor(diff / 1000);
@@ -75,58 +86,94 @@ const EVENT_DATE = new Date('2026-09-12T09:00:00-05:00');
     updateDigit(elMinutes, pad(minutes));
     updateDigit(elSeconds, pad(seconds));
 
-    // Update accessible label for screen readers every minute
-    if (seconds === 0) {
-      elCountdown.setAttribute(
-        'aria-label',
-        `Faltan ${days} días, ${hours} horas y ${minutes} minutos para el evento`
-      );
+    // Actualizar aria-label cada minuto (cuando segundos == 0) y en el primer tick
+    if (seconds === 0 || elCountdown.getAttribute('aria-label') === null) {
+      updateAriaLabel(days, hours, minutes);
     }
 
     setTimeout(tick, 1000);
   }
 
+  // Establecer aria-label inicial antes del primer tick
+  elCountdown.setAttribute('aria-label', 'Calculando tiempo restante para el evento');
   tick();
 })();
 
 /* ══════════════════════════════════════════════════════
-   AGENDA INTERACTIVA
-   Resalta el bloque de tiempo actual durante el evento.
-   Fuera del horario del evento no resalta nada.
+   RF-03 · AGENDA INTERACTIVA
+   - 6 bloques timeline con expand/collapse
+   - Solo un bloque expandido a la vez
+   - Navegación por teclado: Enter / Space
+   - aria-expanded actualizado en cada interacción
+   RF-04 · RESALTADO EN VIVO
+   - isActive() con hora Colombia UTC-5
+   - Recalculo cada 30s con setInterval
+   - aria-current en bloque activo
    ══════════════════════════════════════════════════════ */
 (function initAgenda() {
   /**
-   * Agenda slots: each entry maps to a .timeline-item by index.
-   * times are [startHour, startMin] in UTC-5.
+   * Slots de la agenda mapeados a .timeline-item por índice.
+   * Horas en UTC-5 (Colombia). Solo activos el 12 sep 2026.
    */
+  const EVENT_DAY = '2026-09-12'; // fecha del evento (Colombia)
+
   const slots = [
-    { label: 'Bienvenida',          start: [9,  0],  end: [9, 15] },
-    { label: 'Vibecoding',          start: [9, 15],  end: [9, 45] },
-    { label: 'Demo Kiro',           start: [9, 45],  end: [10, 0] },
-    { label: 'Refrigerio',          start: [10,  0], end: [10, 15] },
-    { label: 'Flappy Kiro',         start: [10, 15], end: [11,  0] },
-    { label: 'Cierre',              start: [11,  0], end: [11, 15] },
+    { label: 'Bienvenida',  start: [9,  0],  end: [9,  15] },
+    { label: 'Vibecoding',  start: [9,  15], end: [9,  45] },
+    { label: 'Demo Kiro',   start: [9,  45], end: [10,  0] },
+    { label: 'Refrigerio',  start: [10,  0], end: [10, 15] },
+    { label: 'Flappy Kiro', start: [10, 15], end: [11,  0] },
+    { label: 'Cierre',      start: [11,  0], end: [11, 15] },
   ];
 
   const items = document.querySelectorAll('.timeline-item');
   if (!items.length) return;
 
+  // RF-03: Inicializar aria-expanded en false en todos los bloques
+  items.forEach((item) => {
+    item.setAttribute('aria-expanded', 'false');
+  });
+
+  /* ── RF-04: Detección hora Colombia ─────────────────── */
   /**
-   * Returns true if the current local time (in Colombia, UTC-5) falls
-   * within [startH:startM, endH:endM).
+   * Devuelve la hora actual en Colombia (UTC-5) como objeto {date, hours, minutes}.
+   * @returns {{ dateStr: string, totalMin: number }}
    */
-  function isActive(startH, startM, endH, endM) {
-    // Get current time in Colombia (UTC-5)
+  function getColombiaTime() {
     const now = new Date();
     const utc = now.getTime() + now.getTimezoneOffset() * 60000;
     const col = new Date(utc + (-5 * 3600000));
-    const curMin = col.getHours() * 60 + col.getMinutes();
-    const startMin = startH * 60 + startM;
-    const endMin   = endH   * 60 + endM;
-    return curMin >= startMin && curMin < endMin;
+    const y   = col.getFullYear();
+    const m   = String(col.getMonth() + 1).padStart(2, '0');
+    const d   = String(col.getDate()).padStart(2, '0');
+    return {
+      dateStr:  `${y}-${m}-${d}`,
+      totalMin: col.getHours() * 60 + col.getMinutes(),
+    };
   }
 
+  /**
+   * Devuelve true si la hora Colombia actual cae dentro del slot,
+   * Y solo si es el día del evento.
+   * @param {number} sh - start hour
+   * @param {number} sm - start minute
+   * @param {number} eh - end hour
+   * @param {number} em - end minute
+   */
+  function isActive(sh, sm, eh, em) {
+    const { dateStr, totalMin } = getColombiaTime();
+    if (dateStr !== EVENT_DAY) return false;
+    return totalMin >= sh * 60 + sm && totalMin < eh * 60 + em;
+  }
+
+  /** RF-04: Resalta el bloque activo; limpia los demás.
+   *  RNF-04.1: Guard document.hidden para no consumir CPU
+   *  cuando la pestaña está en segundo plano.
+   */
   function highlightCurrentSlot() {
+    // RNF-04.1: saltar cálculo si la pestaña está inactiva
+    if (document.hidden) return;
+
     items.forEach((item, i) => {
       if (!slots[i]) return;
       const [sh, sm] = slots[i].start;
@@ -142,63 +189,92 @@ const EVENT_DATE = new Date('2026-09-12T09:00:00-05:00');
   }
 
   highlightCurrentSlot();
-  // Re-check every 30 seconds
-  setInterval(highlightCurrentSlot, 30000);
+  setInterval(highlightCurrentSlot, 30000); // RF-04: recalculo cada 30s
 
-  /* ── Expand/collapse on click (optional detail toggle) ── */
-  items.forEach((item) => {
-    item.addEventListener('click', () => {
-      const isExpanded = item.classList.contains('tl-item--expanded');
-      // Collapse all
-      items.forEach(i => {
-        i.classList.remove('tl-item--expanded');
-        i.setAttribute('aria-expanded', 'false');
-      });
-      // Expand clicked unless it was already expanded
-      if (!isExpanded) {
-        item.classList.add('tl-item--expanded');
-        item.setAttribute('aria-expanded', 'true');
-      }
+  /* ── RF-03: Expand / collapse ────────────────────────── */
+  /**
+   * Alterna el estado expandido de un bloque.
+   * Colapsa todos los demás primero.
+   * @param {HTMLElement} clickedItem
+   */
+  function toggleItem(clickedItem) {
+    const isExpanded = clickedItem.classList.contains('tl-item--expanded');
+
+    // Colapsar todos
+    items.forEach((item) => {
+      item.classList.remove('tl-item--expanded');
+      item.setAttribute('aria-expanded', 'false');
     });
 
+    // Expandir el clickeado solo si no estaba expandido
+    if (!isExpanded) {
+      clickedItem.classList.add('tl-item--expanded');
+      clickedItem.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  items.forEach((item) => {
+    // Click
+    item.addEventListener('click', () => toggleItem(item));
+
+    // Teclado: Enter y Space (RF-03 accesibilidad)
     item.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        item.click();
+        toggleItem(item);
+      }
+      // Flecha abajo / arriba para navegar entre bloques
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const next = item.nextElementSibling;
+        if (next && next.classList.contains('timeline-item')) next.focus();
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prev = item.previousElementSibling;
+        if (prev && prev.classList.contains('timeline-item')) prev.focus();
       }
     });
   });
 })();
 
 /* ══════════════════════════════════════════════════════
-   INTERSECTION OBSERVER — Animaciones de entrada
+   RF-08 · INTERSECTION OBSERVER — Animaciones de entrada
+   - Targets: .timeline-item, .speaker-card, .section-header,
+     .countdown-wrapper, .footer-organizers
+   - opacity 0→1 + translateY(24px→0) con stagger 0.05s
+   - Se anima una sola vez (unobserve tras disparar)
+   - Guard: prefers-reduced-motion → skip todas las animaciones
    ══════════════════════════════════════════════════════ */
 (function initAnimations() {
-  // Add initial state class to animatable elements
   const targets = document.querySelectorAll(
-    '.timeline-item, .speaker-card, .section-header, .countdown-wrapper'
+    '.timeline-item, .speaker-card, .section-header, .countdown-wrapper, .footer-organizers'
   );
 
   if (!targets.length) return;
 
-  // Only animate if the user hasn't requested reduced motion
+  /**
+   * Si el usuario prefiere movimiento reducido,
+   * no aplicar ninguna animación de entrada.
+   */
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReduced) return;
 
+  // Estado inicial: invisible y desplazado hacia abajo
   targets.forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    el.style.transition = `opacity 0.5s ease ${i * 0.05}s, transform 0.5s ease ${i * 0.05}s`;
+    el.style.opacity    = '0';
+    el.style.transform  = 'translateY(24px)';
+    el.style.transition = `opacity 0.5s ease ${(i * 0.05).toFixed(2)}s, transform 0.5s ease ${(i * 0.05).toFixed(2)}s`;
   });
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-          observer.unobserve(entry.target);
-        }
+        if (!entry.isIntersecting) return;
+        // Animar y dejar de observar (solo una vez)
+        entry.target.style.opacity   = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
       });
     },
     { threshold: 0.12 }
@@ -208,14 +284,25 @@ const EVENT_DATE = new Date('2026-09-12T09:00:00-05:00');
 })();
 
 /* ══════════════════════════════════════════════════════
-   PIXEL ROBOT — Cursor code animation
-   Cycles random code snippets on the robot's screen
+   RF-06 · PIXEL ROBOT — Animación de pantalla
+   - El robot CSS es fallback cuando hero-illustration.png falla
+   - La visibilidad inicial se controla desde el HTML (onerror/onload)
+   - Esta IIFE solo maneja los snippets rotativos de la pantalla
    ══════════════════════════════════════════════════════ */
 (function initPixelRobot() {
   const screen = document.querySelector('.pr-code');
   if (!screen) return;
 
-  const snippets = ['_', '{}', '/>', '[]', '=>', '/**', '✓', '🚀', '<>', ';;'];
+  /**
+   * Snippets que rotan en la pantalla del robot cada 1.4s.
+   * Mezcla de símbolos de código y emojis técnicos.
+   * @type {string[]}
+   */
+  const snippets = [
+    '_',   '{}',  '/>',  '[]',  '=>',
+    '/**', '✓',   '🚀',  '<>',  ';;',
+    'fn()', '···', '✦',  '[]', '#!',
+  ];
   let idx = 0;
 
   setInterval(() => {
@@ -225,25 +312,31 @@ const EVENT_DATE = new Date('2026-09-12T09:00:00-05:00');
 })();
 
 /* ══════════════════════════════════════════════════════
-   SMOOTH SCROLL — Enhanced for internal anchors
+   RNF-03 · SMOOTH SCROLL — Anchors internos accesibles
+   - Scroll suave a la sección destino
+   - Mueve el foco al destino para screen readers
    ══════════════════════════════════════════════════════ */
 (function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', (e) => {
-      const target = document.querySelector(anchor.getAttribute('href'));
+      const href   = anchor.getAttribute('href');
+      const target = document.querySelector(href);
       if (!target) return;
       e.preventDefault();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // Move focus to section for accessibility
-      target.setAttribute('tabindex', '-1');
+      // Mover foco al destino para lectores de pantalla
+      if (!target.hasAttribute('tabindex')) {
+        target.setAttribute('tabindex', '-1');
+      }
       target.focus({ preventScroll: true });
     });
   });
 })();
 
 /* ══════════════════════════════════════════════════════
-   AGENDA ACTIVE STYLES — injected dynamically
-   (avoids CSS specificity issues with the star card)
+   RF-04 · AGENDA ACTIVE STYLES — Inyectados dinámicamente
+   Evita conflictos de especificidad con .tl-card--star.
+   Solo contiene estilos que dependen de estado JS en tiempo real.
    ══════════════════════════════════════════════════════ */
 (function injectActiveStyles() {
   const style = document.createElement('style');
@@ -260,6 +353,9 @@ const EVENT_DATE = new Date('2026-09-12T09:00:00-05:00');
     .tl-item--active .tl-time .tl-hour {
       color: var(--neon) !important;
     }
+    .tl-item--active {
+      position: relative;
+    }
     .tl-item--active::before {
       content: '● EN VIVO';
       position: absolute;
@@ -273,15 +369,9 @@ const EVENT_DATE = new Date('2026-09-12T09:00:00-05:00');
       animation: activePulse 1.2s ease-in-out infinite;
       z-index: 2;
     }
-    .tl-item--active {
-      position: relative;
-    }
     @keyframes activePulse {
       0%, 100% { opacity: 1; }
       50%       { opacity: 0.4; }
-    }
-    .tl-item--expanded .tl-desc {
-      max-height: 200px;
     }
   `;
   document.head.appendChild(style);
